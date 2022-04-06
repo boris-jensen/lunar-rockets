@@ -1,27 +1,35 @@
 package com.lunar.rockets.domain.service;
 
 import com.lunar.rockets.domain.objects.DomainMessage;
-import com.lunar.rockets.domain.objects.DomainRocket;
 import com.lunar.rockets.domain.objects.RocketState;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Component
 public class RocketService {
 
+    ConcurrentMap<UUID, RocketState> rockets = new ConcurrentHashMap<>();
+
     public void acceptMessage(@NotNull DomainMessage<?> message) {
-        System.out.println(message.messageNumber());
+        rockets.compute(message.rocketID(), (k, state) -> (state == null)
+                ? RocketState.initial(message)
+                : state.receiveMessage(message.details()));
     }
 
-    public List<DomainRocket> getRockets() {
-        return new ArrayList<>();
+    public List<RocketState> getRockets() {
+        return rockets
+            .values()
+            .stream()
+            .toList();
     }
 
-    public DomainRocket getRocket(UUID rocketId) {
-        return new DomainRocket(UUID.randomUUID(), "foo", "bar", new RocketState.Flying(1000));
+    public Optional<RocketState> getRocket(UUID rocketId) {
+        return Optional.ofNullable(rockets.get(rocketId));
     }
 }

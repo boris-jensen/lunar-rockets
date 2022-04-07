@@ -6,7 +6,7 @@ A service to receive rocket messages and present the resulting rocket states
 The program requires java 17
 
 To compile:
-```json
+```
 mvn clean package
 ```
 

@@ -1,5 +1,6 @@
 package com.lunar.rockets.domain.objects;
 
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 import lombok.experimental.NonFinal;
 import com.lunar.rockets.domain.objects.DomainMessageDetails.RocketLaunched;
@@ -29,6 +30,7 @@ public abstract class RocketState {
 
     public abstract RocketState receiveMessage(DomainMessageDetails message);
 
+    @EqualsAndHashCode(callSuper = true)
     @Value
     public static class Flying extends RocketState {
 
@@ -57,6 +59,7 @@ public abstract class RocketState {
 
     }
 
+    @EqualsAndHashCode(callSuper = true)
     @Value
     public static class Exploded extends RocketState {
 

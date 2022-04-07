@@ -18,7 +18,7 @@ public class MessageController {
 
     private final RocketService rocketService;
 
-    @PostMapping
+    @PostMapping(consumes = {"application/json"})
     public ResponseEntity<Void> postMessage(@RequestBody MessageWrapper<?> wrapper) {
         DomainMessageDetails details = toDomainMessage(wrapper);
         DomainMessage<?> domainMessage = new DomainMessage<>(wrapper.getMetadata().getChannel(), wrapper.getMetadata().getMessageNumber(), details);

@@ -19,12 +19,11 @@ public abstract class RocketState {
     String type;
     String mission;
 
-    public static RocketState initial(DomainMessage<?> message) {
-        DomainMessageDetails details = message.details();
+    public static RocketState initial(UUID rocketId, DomainMessageDetails details) {
         if (details instanceof RocketLaunched rocketLaunched) {
-            return new Flying(message.rocketID(), rocketLaunched.type(), rocketLaunched.mission(), rocketLaunched.launchSpeed());
+            return new Flying(rocketId, rocketLaunched.type(), rocketLaunched.mission(), rocketLaunched.launchSpeed());
         } else {
-            return null;
+            return null; // TODO should we explode here, if exploding?
         }
     }
 
